@@ -15,12 +15,12 @@ app.use((req, res, next) => {
       _id: '5f6f1a32cf90cf25e431aff1' // вставьте сюда _id созданного в предыдущем пункте пользователя
   };
   next();
-}); 
+});
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
   useCreateIndex: true,
-    useFindAndModify: false
+  useFindAndModify: false,
 });
 
 app.use('/users', routeUsers);
