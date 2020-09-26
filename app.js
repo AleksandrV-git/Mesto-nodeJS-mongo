@@ -10,10 +10,11 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use((req, res) => {
+app.use((req, res, next) => {
   req.user = {
       _id: '5f6f1a32cf90cf25e431aff1' // вставьте сюда _id созданного в предыдущем пункте пользователя
   };
+  next();
 }); 
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
