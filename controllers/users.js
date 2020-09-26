@@ -8,7 +8,7 @@ module.exports.getUsers = (req, res) => {
 };
 
 module.exports.getUserById = (req, res) => {
-  UserModel.findById(req.params.id)
+  UserModel.findById(req.params._id)
   .then(user => res.send({ data: user }))
   .catch(() => res.status(500).send({ message: 'Запрашиваемый ресурс не найден' }));
 };
