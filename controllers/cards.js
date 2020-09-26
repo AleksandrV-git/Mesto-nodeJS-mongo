@@ -1,16 +1,22 @@
-const router = require('express').Router();
-const fs = require('fs').promises;
-const path = require('path');
+const cardModel = require('../models/card.js');
 
-const pathToCards = path.join(__dirname, '../data/cards.json');
-router.get('/', (_req, res) => {
-  fs.readFile(pathToCards, 'utf8')
-    .then((cards) => {
-      res.send(JSON.parse(cards));
-    })
-    .catch(() => {
-      res.status(500).send({ message: 'Запрашиваемый ресурс не найден' });
-    });
-});
 
-module.exports = router;
+module.exports.getCards = (req, res) => {
+  cardModel.find({})
+    .then(card => res.send({ data: card }))
+    .catch(() => res.status(500).send({ message: 'Запрашиваемый ресурс не найден' }));
+};
+
+module.exports.DeleteCardById = (req, res) => {
+  cardModel.findByIdAndRemove(req.params.cardId)
+  .then(card => res.send({ data: card }))
+  .catch(() => res.status(500).send({ message: 'Запрашиваемый ресурс не найден' }));
+};
+
+module.exports.createCard = (req, res) => {
+  const { name, link } = req.body;
+
+  cardModel.create({ name, link })
+    .then(card => res.send({ data: card }))
+    .catch(err => res.status(500).send({ message: err.message }));
+};
