@@ -4,13 +4,13 @@ const cardModel = require('../models/card.js');
 module.exports.getCards = (req, res) => {
   cardModel.find({})
     .then(card => res.send({ data: card }))
-    .catch(() => res.status(500).send({ message: 'Запрашиваемый ресурс не найден' }));
+    .catch(() => res.status(404).send({ message: 'Запрашиваемый ресурс не найден' }));
 };
 
 module.exports.DeleteCardById = (req, res) => {
   cardModel.findByIdAndRemove(req.params.cardId)
-  .then(card => res.send({ data: card }))
-  .catch(() => res.status(500).send({ message: 'Запрашиваемый ресурс не найден' }));
+    .then(card => res.send({ data: card }))
+    .catch(() => res.status(404).send({ message: 'Запрашиваемый ресурс не найден' }));
 };
 
 module.exports.createCard = (req, res) => {
@@ -19,5 +19,10 @@ module.exports.createCard = (req, res) => {
 
   cardModel.create({ name, link, owner: ownerId })
     .then(card => res.send({ data: card }))
-    .catch(err => res.status(500).send({ message: err.message }));
+    .catch((err) => {
+      if (err.errors === "name" || "link" || "owner") {
+        res.status(400).send({ message: 'Невалидные данные' });
+      }
+      res.status(500).send({ message: 'На сервере произошла ошибка' })
+    });
 };
