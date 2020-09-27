@@ -14,13 +14,14 @@ NodeJS, express, REST API
 
 ## Пакеты которые используются в сборках:
 
-  - "eslint": "^7.8.1",
+  - "eslint": "^7.10.0",
   - "eslint-config-airbnb-base": "^14.2.0",
   - "eslint-plugin-import": "^2.22.0",
   - "nodemon": "^2.0.4"
   - "express": "^4.17.1"
   - "body-parser": "^1.19.0",
   - "mongoose": "^5.10.7"
+  - "express-rate-limit": "^5.1.3"
 
 ## Инструкции по запуску:
 - Скачать или склонировать репозиторий
