@@ -9,8 +9,15 @@ module.exports.getUsers = (req, res) => {
 
 module.exports.getUserById = (req, res) => {
   UserModel.findById(req.params._id)
+    .orFail(new Error('not found'))
     .then(user => res.send({ data: user }))
-    .catch(() => res.status(404).send({ message: 'Запрашиваемый ресурс не найден' }));
+    .catch((err) => {
+      if (err.message === "not found") {
+        res.status(404).send({ message: "Запрашиваемый ресурс не найден" });
+      } else {
+        res.status(500).send({ message: "Ошибка сервера" });
+      }
+    });
 };
 
 module.exports.updateUser = (req, res) => {
@@ -23,12 +30,14 @@ module.exports.updateUser = (req, res) => {
     new: true, // обработчик then получит на вход обновлённую запись
     runValidators: true, // данные будут валидированы перед изменением
   })
+    .orFail(new Error('not found'))
     .then(user => res.send({ data: user }))
     .catch((err) => {
-      if (err.errors === "name" || "about") {
-        res.status(400).send({ message: 'Невалидные данные' });
+      if (err.message === "not found") {
+        res.status(404).send({ message: "Запрашиваемый ресурс не найден" });
+      } else {
+        res.status(500).send({ message: "Ошибка сервера" });
       }
-      res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
     });
 };
 module.exports.updateAvatar = (req, res) => {
@@ -38,12 +47,14 @@ module.exports.updateAvatar = (req, res) => {
     new: true, // обработчик then получит на вход обновлённую запись
     runValidators: true, // данные будут валидированы перед изменением
   })
+    .orFail(new Error('not found'))
     .then(user => res.send({ data: user }))
     .catch((err) => {
-      if (err.errors === 'avatar') {
-        res.status(400).send({ message: 'Невалидные данные' });
+      if (err.message === "not found") {
+        res.status(404).send({ message: "Запрашиваемый ресурс не найден" });
+      } else {
+        res.status(500).send({ message: "Ошибка сервера" });
       }
-      res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
     });
 };
 
@@ -53,9 +64,10 @@ module.exports.createUser = (req, res) => {
   UserModel.create({ name, about, avatar })
     .then(user => res.send({ data: user }))
     .catch((err) => {
-      if (err.errors === 'name' || 'about' || 'avatar') {
-        res.status(400).send({ message: 'Невалидные данные' });
+      if (err.name === "ValidationError") {
+        res.status(400).send({ message: "Переданы некорректные данные" });
+      } else {
+        res.status(500).send({ message: "Ошибка сервера" });
       }
-      res.status(500).send({ message: 'На сервере произошла ошибка' });
     });
 };
