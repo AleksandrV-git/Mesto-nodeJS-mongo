@@ -1,3 +1,4 @@
+/*eslint-env es6*/
 const mongoose = require('mongoose');
 
 const cardSchema = new mongoose.Schema({

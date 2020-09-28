@@ -1,3 +1,4 @@
+/*eslint-env es6*/
 const cardModel = require('../models/card.js');
 
 module.exports.getCards = (req, res) => {
@@ -34,11 +35,11 @@ module.exports.createCard = (req, res) => {
     });
 };
 
-module.exports.likeCard = (req, res) =>
+module.exports.likeCard = (req, res) => 
   cardModel.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
-    { new: true },
+    { new: true }
   )
     .orFail(new Error('not found'))
     .then(card => res.send({ data: card }))
@@ -54,7 +55,7 @@ module.exports.dislikeCard = (req, res) =>
   cardModel.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } }, // убрать _id из массива
-    { new: true },
+    { new: true }
   )
     .orFail(new Error('not found'))
     .then(card => res.send({ data: card }))

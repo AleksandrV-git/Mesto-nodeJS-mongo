@@ -1,3 +1,4 @@
+/*eslint-env es6*/
 const router = require('express').Router();
 const {getCards, DeleteCardById, createCard, likeCard, dislikeCard} = require('../controllers/cards.js');
 
